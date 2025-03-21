@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Founder-Investor Matching</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 text-center">Founder-Investor Matching</h2>
+        <form id="matchForm" class="space-y-4">
+            <input class="w-full p-2 border rounded" type="text" id="industry" placeholder="Industry" required>
+            <input class="w-full p-2 border rounded" type="text" id="stage" placeholder="Investment Stage" required>
+            <input class="w-full p-2 border rounded" type="text" id="funding" placeholder="Funding Required" required>
+            <input class="w-full p-2 border rounded" type="text" id="country" placeholder="Country" required>
+            <button class="w-full bg-blue-500 text-white p-2 rounded" type="submit">Find Investors</button>
+        </form>
+        <div id="results" class="mt-6"></div>
+    </div>
+
+    <script>
+        document.getElementById("matchForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const industry = document.getElementById("industry").value;
+            const stage = document.getElementById("stage").value;
+            const funding = document.getElementById("funding").value;
+            const country = document.getElementById("country").value;
+
+            // ✅ Replace with your actual Flask ngrok URL
+            const response = await fetch("/match-investors", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ industry, stage, funding, country })
+            });
+
+            const data = await response.json();
+            console.log("Response Data:", data); // Debugging
+
+            if (data.length === 0) {
+                document.getElementById("results").innerHTML = `
+                    <p class="text-center text-gray-500">No investors found. Try different criteria.</p>
+                `;
+                return;
+            }
+
+            // ✅ Display all investors properly
+            document.getElementById("results").innerHTML = `
+                <h3 class="text-lg font-semibold">Top Investors:</h3>
+                ${data.map(investor => `
+                    <div class="bg-gray-200 p-4 my-2 rounded shadow">
+                        <strong class="text-lg">${investor.Investor}</strong>
+                        <p class="text-gray-700"><b>Overall Score:</b> ${investor["Overall Match Score"]}</p>
+                        <p class="text-gray-600"><b>Reason:</b> ${investor.Reasoning}</p>
+
+                        <!-- ✅ Category-wise breakdown -->
+                        <div class="mt-2">
+                            <p class="text-gray-800 font-semibold">Category-wise Scores:</p>
+                            <ul class="list-disc ml-5 text-gray-700">
+                                <li><b>Industry Match:</b> ${investor["Category Scores"]["Industry Match"]}</li>
+                                <li><b>Investment Stage Match:</b> ${investor["Category Scores"]["Investment Stage Match"]}</li>
+                                <li><b>Cheque Range Fit:</b> ${investor["Category Scores"]["Cheque Range Fit"]}</li>
+                                <li><b>Country Compatibility:</b> ${investor["Category Scores"]["Country Compatibility"]}</li>
+                                <li><b>Investor Type Match:</b> ${investor["Category Scores"]["Investor Type Match"]}</li>
+                                <li><b>Global HQ Relevance:</b> ${investor["Category Scores"]["Global HQ Relevance"]}</li>
+                            </ul>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        });
+    </script>
+</body>
+</html>
