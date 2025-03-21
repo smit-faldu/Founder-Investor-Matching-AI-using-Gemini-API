@@ -1,5 +1,6 @@
 # 🚀 Founder-Investor Matching AI using Gemini API
-<!-- [![Try on Hugging Face](https://img.shields.io/badge/-HuggingFace-FDEE21?style=for-the-badge&logo=HuggingFace&logoColor=black)](https://huggingface.co/spaces/smit-faldu/Audio_Translation)  -->
+
+[![Try on Hugging Face](https://img.shields.io/badge/-HuggingFace-FDEE21?style=for-the-badge&logo=HuggingFace&logoColor=black)](https://huggingface.co/spaces/smit-faldu/Founder-Investor-Matching-AI) 
 [![Open in Colab](https://img.shields.io/badge/Colab-F9AB00?style=for-the-badge&logo=googlecolab&color=525252)](https://colab.research.google.com/drive/17mLCRsrMzg8DUz3N9wptQ7JivSrx-aze?usp=sharing)
 
 This project is an **AI-powered web application** that helps match startup founders with the most relevant investors based on industry, funding stage, cheque size, and location. It leverages **Google Gemini API** with **LangChain** and **FAISS vector search** to provide personalized **match scores (0-100)** for each investor.
